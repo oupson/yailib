@@ -1,0 +1,12 @@
+[
+  {
+    "label": "Run PPM",
+    "command": "./tests/test.sh ./tests/input.ppm",
+    "env": {},
+    "use_new_terminal": false,
+    "allow_concurrent_runs": false,
+    "reveal": "always",
+    "hide": "never",
+    "shell": "system"
+  }
+]
