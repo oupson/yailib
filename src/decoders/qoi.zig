@@ -150,22 +150,13 @@ const QoiDecoder = struct {
                     var latest = self.latest;
                     // QOI_OP_DIFF
 
-                    const diffR = @subWithOverflow(@shrExact(
-                        self.buffer[index] & 0b00110000,
-                        4,
-                    ), 2)[0];
-                    const diffG = @subWithOverflow(@shrExact(
-                        self.buffer[index] & 0b00001100,
-                        2,
-                    ), 2)[0];
-                    const diffB = @subWithOverflow(@shrExact(
-                        self.buffer[index] & 0b00000011,
-                        0,
-                    ), 2)[0];
+                    const diffR = @shrExact(self.buffer[index] & 0b00110000, 4) -% 2;
+                    const diffG = @shrExact(self.buffer[index] & 0b00001100, 2) -% 2;
+                    const diffB = @shrExact(self.buffer[index] & 0b00000011, 0) -% 2;
 
-                    latest.r = @addWithOverflow(latest.r, diffR)[0];
-                    latest.g = @addWithOverflow(latest.g, diffG)[0];
-                    latest.b = @addWithOverflow(latest.b, diffB)[0];
+                    latest.r = latest.r +% diffR;
+                    latest.g = latest.g +% diffG;
+                    latest.b = latest.b +% diffB;
 
                     self.runningArray.put(latest);
                     self.latest = latest;
@@ -180,30 +171,14 @@ const QoiDecoder = struct {
                 } else if (@shrExact(self.buffer[index] & 0b11000000, 6) == 0b10) {
                     var latest = self.latest;
 
-                    const dg = @subWithOverflow(
-                        self.buffer[index] & 0b00111111,
-                        32,
-                    )[0];
+                    const dg = (self.buffer[index] & 0b00111111) -% 32;
 
-                    const dr = @addWithOverflow(
-                        @subWithOverflow(
-                            @shrExact(self.buffer[index + 1] & 0b11110000, 4),
-                            8,
-                        )[0],
-                        dg,
-                    )[0];
+                    const dr = (@shrExact(self.buffer[index + 1] & 0b11110000, 4) -% 8) +% dg;
+                    const db = (@shrExact(self.buffer[index + 1] & 0b00001111, 0) -% 8) +% dg;
 
-                    const db = @addWithOverflow(
-                        @subWithOverflow(
-                            @shrExact(self.buffer[index + 1] & 0b00001111, 0),
-                            8,
-                        )[0],
-                        dg,
-                    )[0];
-
-                    latest.r = @addWithOverflow(latest.r, dr)[0];
-                    latest.g = @addWithOverflow(latest.g, dg)[0];
-                    latest.b = @addWithOverflow(latest.b, db)[0];
+                    latest.r = latest.r +% dr;
+                    latest.g = latest.g +% dg;
+                    latest.b = latest.b +% db;
 
                     self.runningArray.put(latest);
                     self.latest = latest;
