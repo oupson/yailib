@@ -8,5 +8,15 @@
     "reveal": "always",
     "hide": "never",
     "shell": "system"
+  },
+  {
+    "label": "Run qoi",
+    "command": "./tests/test.sh ./tests/input.qoi",
+    "env": {},
+    "use_new_terminal": false,
+    "allow_concurrent_runs": false,
+    "reveal": "always",
+    "hide": "never",
+    "shell": "system"
   }
 ]

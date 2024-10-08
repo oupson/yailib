@@ -2,9 +2,14 @@ const std = @import("std");
 const Allocator = std.mem.Allocator;
 
 const ppm = @import("ppm.zig");
+const qoi = @import("qoi.zig");
+
 const lib = @import("../root.zig");
 
-const factories = [_]DecoderFactory{ppm.PPMDecoderFactory};
+const factories = [_]DecoderFactory{
+    ppm.PPMDecoderFactory,
+    qoi.DecoderFactory,
+};
 
 pub fn getDecoderFactory(buffer: []u8) DecoderError!DecoderFactory {
     for (factories) |factory| {
@@ -28,6 +33,7 @@ pub const DecoderError = error{
     ParseIntError,
     Overflow,
     InvalidCharacter,
+    Uninplemented,
 };
 
 pub const DecoderFactory = struct {

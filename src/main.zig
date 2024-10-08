@@ -15,7 +15,7 @@ pub fn main() !void {
 
     const inputFile = try cwd.openFile(name, .{});
     const reader = inputFile.reader();
-    var buffer: [1024]u8 = undefined;
+    var buffer: [5037111]u8 = undefined;
 
     var size = try reader.read(&buffer);
     const factory = try yaiv.Decoder.getDecoderFactory(buffer[0..size]);
