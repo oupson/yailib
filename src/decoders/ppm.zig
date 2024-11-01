@@ -74,7 +74,7 @@ const PPMDecoder = struct {
                     const width = try std.fmt.parseInt(usize, f.next().?, 10);
 
                     const height = try std.fmt.parseInt(usize, f.next().?, 10);
-                    self.image = try lib.Image.init(self.allocator, width, height);
+                    self.image = try lib.Image.init(self.allocator, width, height, lib.PixelType.Rgb);
 
                     self.buffer = self.buffer[indexOfNext + 1 ..];
 
@@ -91,13 +91,13 @@ const PPMDecoder = struct {
                 }
             } else {
                 for (self.buffer) |p| {
-                    self.image.?.pixels[self.index] = p;
+                    self.image.?.pixels_raw[self.index] = p;
                     self.index += 1;
                 }
 
                 self.buffer = &.{};
 
-                if (self.index == self.image.?.pixels.len) {
+                if (self.index == self.image.?.pixels_raw.len) {
                     return decoder.Event.Finished;
                 } else {
                     return decoder.Event.NeedMoreData;

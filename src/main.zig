@@ -45,5 +45,5 @@ pub fn main() !void {
     const imgRes = try decoder.getResult();
 
     const out = std.io.getStdOut();
-    try out.writeAll(imgRes.pixels);
+    try out.writeAll(imgRes.pixels_raw);
 }
